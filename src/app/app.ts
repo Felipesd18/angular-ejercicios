@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UserCardComponent } from './components/user-card/user-card';
+import { User } from './services/user';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,8 @@ import { UserCardComponent } from './components/user-card/user-card';
 })
 export class App {
   protected readonly title = signal('angular-ejercicios');
-  users = signal([
-    { id: 1, name: 'Felipe', role: 'Ingeniero Informático', active: true },
-    { id: 2, name: 'Camila', role: 'Diseñadora UX/UI', active: false },
-    { id: 3, name: 'Roberto', role: 'DevOps Engineer', active: true },
-  ]);
+
+  private userService = inject(User);
+
+  users = this.userService.users;
 }
