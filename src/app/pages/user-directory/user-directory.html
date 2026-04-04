@@ -32,8 +32,21 @@
           [class.border-gray-300]="userForm.controls.role.valid || !userForm.controls.role.touched"
           placeholder="Ej. Frontend Developer"
         />
-        @if (userForm.controls.role.invalid && userForm.controls.role.touched) {
-          <span class="text-xs text-red-500 mt-1 font-medium">El rol es obligatorio.</span>
+
+        @if (userForm.controls.role.touched && userForm.controls.role.invalid) {
+          @if (userForm.controls.role.hasError('required')) {
+            <span class="block text-xs text-red-500 mt-1 font-medium">El rol es obligatorio.</span>
+          }
+
+          @if (userForm.controls.role.hasError('forbiddenWord')) {
+            <span class="block text-xs text-red-500 mt-1 font-medium">
+              Por razones de seguridad, la palabra
+              <span class="font-bold uppercase">
+                "{{ userForm.controls.role.getError('forbiddenWord').word }}"
+              </span>
+              no está permitida.
+            </span>
+          }
         }
       </div>
 
