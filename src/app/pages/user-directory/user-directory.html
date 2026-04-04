@@ -4,29 +4,37 @@
   <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-10">
     <h2 class="text-xl font-semibold mb-4 text-gray-700">Agregar nuevo usuario</h2>
 
-    <form (ngSubmit)="saveUser()" class="flex flex-col gap-4">
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="flex flex-col gap-4">
       <div>
         <label class="block text-sm text-gray-600 mb-1">Nombre del usuario</label>
         <input
           type="text"
-          name="userName"
-          [(ngModel)]="newUserName"
-          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          formControlName="name"
+          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+          [class.border-red-500]="userForm.controls.name.invalid && userForm.controls.name.touched"
+          [class.border-gray-300]="userForm.controls.name.valid || !userForm.controls.name.touched"
           placeholder="Ej. Ana Pérez"
-          required
         />
+        @if (userForm.controls.name.invalid && userForm.controls.name.touched) {
+          <span class="text-xs text-red-500 mt-1 font-medium"
+            >El nombre es obligatorio y debe tener al menos 3 letras.</span
+          >
+        }
       </div>
 
       <div>
         <label class="block text-sm text-gray-600 mb-1">Rol</label>
         <input
           type="text"
-          name="userRole"
-          [(ngModel)]="newUserRole"
-          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          formControlName="role"
+          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+          [class.border-red-500]="userForm.controls.role.invalid && userForm.controls.role.touched"
+          [class.border-gray-300]="userForm.controls.role.valid || !userForm.controls.role.touched"
           placeholder="Ej. Frontend Developer"
-          required
         />
+        @if (userForm.controls.role.invalid && userForm.controls.role.touched) {
+          <span class="text-xs text-red-500 mt-1 font-medium">El rol es obligatorio.</span>
+        }
       </div>
 
       <button
