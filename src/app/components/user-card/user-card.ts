@@ -1,14 +1,16 @@
 import { Component, input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-card',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './user-card.html',
   styleUrl: './user-card.css',
 })
 export class UserCardComponent {
+  userId = input.required<number>();
   userName = model.required<string>();
 
   role = input.required<string>();

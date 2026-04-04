@@ -1,0 +1,35 @@
+<div class="max-w-2xl mx-auto p-6 mt-10">
+  <a routerLink="/users" class="text-blue-500 hover:underline mb-6 inline-block">
+    &larr; Volver al directorio
+  </a>
+
+  @if (user()) {
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+      <div class="flex items-center gap-4 mb-6">
+        <div
+          class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl font-bold"
+        >
+          {{ user()!.name.charAt(0) }}
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">{{ user()?.name }}</h1>
+          <p class="text-lg text-indigo-500 font-medium">{{ user()?.role }}</p>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 pt-6 mt-6">
+        <h3 class="text-sm text-gray-500 uppercase font-semibold mb-2">Estado de la cuenta</h3>
+        <span
+          class="px-3 py-1 rounded-full text-sm font-bold"
+          [class]="user()?.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+        >
+          {{ user()?.active ? 'En línea' : 'Desconectado' }}
+        </span>
+      </div>
+    </div>
+  } @else {
+    <div class="bg-red-50 text-red-600 p-6 rounded-lg text-center font-semibold">
+      Usuario no encontrado.
+    </div>
+  }
+</div>
