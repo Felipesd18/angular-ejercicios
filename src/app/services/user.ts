@@ -1,16 +1,42 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { delay, finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class User {
-  users = signal([
-    { id: 1, name: 'Felipe', role: 'Ingeniero Informático', active: true },
-    { id: 2, name: 'Camila', role: 'Diseñadora UX/UI', active: false },
-    { id: 3, name: 'Roberto', role: 'DevOps Engineer', active: true },
-  ]);
+  private http = inject(HttpClient);
 
-  constructor() {}
+  users = signal<any[]>([]);
+  isLoading = signal(false);
+
+  loadUsersFromApi() {
+    this.isLoading.set(true);
+    this.http
+      .get<any[]>('https://jsonplaceholder.typicode.com/users')
+      .pipe(
+        delay(1500), // Simula retraso de red
+      )
+      .subscribe({
+        next: (apiUsers) => {
+          const mappedUsers = apiUsers.map((u) => ({
+            id: u.id,
+            name: u.name,
+            role: 'Usuario de API',
+            active: true,
+          }));
+
+          this.users.set(mappedUsers);
+        },
+        error: (err) => {
+          console.error('Error al cargar usuarios:', err);
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
 
   addUser(name: string, role: string) {
     const newUser = {

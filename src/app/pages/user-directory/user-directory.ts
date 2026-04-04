@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -28,10 +28,11 @@ export function forbiddenWordValidator(forbiddenWord: string): ValidatorFn {
   templateUrl: './user-directory.html',
   styleUrl: './user-directory.css',
 })
-export class UserDirectory {
+export class UserDirectory implements OnInit {
   private userService = inject(User);
 
   users = this.userService.users;
+  isLoading = this.userService.isLoading;
 
   userForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -42,6 +43,12 @@ export class UserDirectory {
       forbiddenWordValidator('root'),
     ]),
   });
+
+  ngOnInit() {
+    if (this.users().length === 0) {
+      this.userService.loadUsersFromApi();
+    }
+  }
 
   saveUser() {
     if (this.userForm.valid) {
